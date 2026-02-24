@@ -21,6 +21,11 @@ class Piece:
         self.piece_type = piece_type
 
     def __str__(self) -> str:
+        if self.piece_type == PieceType.MAN:
+            return "○" if self.color == Color.WHITE else "●"
+        return "◎" if self.color == Color.WHITE else "◉"
+
+    def __repr__(self) -> str:
         color = "white" if self.color == Color.WHITE else "black"
         piece_type = "man" if self.piece_type == PieceType.MAN else "king"
         return f"{color} {piece_type}"

@@ -1,6 +1,6 @@
 from enum import Enum
 
-from piece import Piece, Color, PieceType
+from app.piece import Piece, Color, PieceType
 
 
 class Direction(Enum):
@@ -26,6 +26,7 @@ class Board:
         self.width = width
         self.height = height
         self.board: list[list[Node]] = self.build_board()
+        self.setup_pieces()
 
     def build_board(self) -> list[list[Node]]:
         board = [
@@ -35,6 +36,9 @@ class Board:
 
         for row in range(self.height):
             for col in range(self.width):
+                if (row + col) % 2 == 1:
+                    continue
+
                 node: Node = board[row][col]
                 if row > 0 and col > 0:
                     node.neighbors[Direction.BOT_LEFT] = board[row-1][col-1]
@@ -47,16 +51,29 @@ class Board:
 
         return board
 
+    def setup_pieces(self) -> None:
+        for i in range(self.height):
+            for j in range(self.width):
+                if (i + j) % 2 == 0:
+                    if i < self.width // 2 - 1:
+                        self.board[i][j].value = Piece(
+                            Color.WHITE,
+                            PieceType.MAN
+                        )
+                    if i > self.width // 2 + 1:
+                        self.board[i][j].value = Piece(
+                            Color.BLACK,
+                            PieceType.MAN
+                        )
+
     def print_board(self) -> None:
         for row in self.board:
-            out = []
             for node in row:
-                piece = node.value
-                if piece is None:
-                    out.append(".")
+                if node.value:
+                    print(node.value, end=" ")
                 else:
-                    char = "w" if piece.color == Color.WHITE else "b"
-                    if piece.piece_type == PieceType.KING:
-                        char = char.upper()
-                    out.append(char)
-            print(" ".join(out))
+                    if (node.row + node.col) % 2 == 0:
+                        print("#", end=" ")
+                    else:
+                        print(".", end=" ")
+            print()

@@ -1,4 +1,4 @@
-from board import Board
+from app.board import Board
 
 
 def main():
@@ -8,3 +8,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    chars = ("⬜", "⬛", "○", "◎", "●", "◉", "o", "▪", "▫", "#", "[]")
