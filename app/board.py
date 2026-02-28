@@ -35,6 +35,9 @@ class Board:
     def __getitem__(self, index: int) -> list[Node]:
         return self.board[index]
 
+    def flip_board(self) -> None:
+        self.is_board_flipped = not self.is_board_flipped
+
     def build_board(self) -> list[list[Node]]:
         board = [
             [Node(row, col) for col in range(self.width)]
