@@ -18,7 +18,10 @@ class Node:
         self.neighbors: dict[Direction, Node] = {}
 
     def __repr__(self) -> str:
-        return f"Node({self.row}, {self.col}, piece={self.piece})"
+        return f"Node({self.row}, {self.col}, piece={self.value})"
+
+    def __str__(self) -> str:
+        return str(self.value)
 
 
 class Board:
@@ -26,7 +29,11 @@ class Board:
         self.width = width
         self.height = height
         self.board: list[list[Node]] = self.build_board()
+        self.is_board_flipped = False
         self.setup_pieces()
+
+    def __getitem__(self, index: int) -> list[Node]:
+        return self.board[index]
 
     def build_board(self) -> list[list[Node]]:
         board = [
@@ -54,26 +61,38 @@ class Board:
     def setup_pieces(self) -> None:
         for i in range(self.height):
             for j in range(self.width):
-                if (i + j) % 2 == 0:
-                    if i < self.width // 2 - 1:
-                        self.board[i][j].value = Piece(
-                            Color.WHITE,
-                            PieceType.MAN
-                        )
-                    if i > self.width // 2 + 1:
-                        self.board[i][j].value = Piece(
-                            Color.BLACK,
-                            PieceType.MAN
-                        )
+                if (i + j) % 2 != 0:
+                    continue
+
+                if i < self.width // 2 - 1:
+                    self.board[i][j].value = Piece(
+                        Color.WHITE,
+                        PieceType.MAN
+                    )
+                if i >= self.width // 2 + 1:
+                    self.board[i][j].value = Piece(
+                        Color.BLACK,
+                        PieceType.MAN
+                    )
+
+    def print_row(self, row: list[Node], end="\n") -> None:
+        if not self.is_board_flipped:
+            row = reversed(row)
+
+        for node in row:
+            if node.value:
+                print(node.value, end=" ")
+            else:
+                if (node.row + node.col) % 2 == 0:
+                    print("#", end=" ")
+                else:
+                    print(".", end=" ")
+        print(end=end)
 
     def print_board(self) -> None:
-        for row in self.board:
-            for node in row:
-                if node.value:
-                    print(node.value, end=" ")
-                else:
-                    if (node.row + node.col) % 2 == 0:
-                        print("#", end=" ")
-                    else:
-                        print(".", end=" ")
-            print()
+        board = self.board
+        if self.is_board_flipped:
+            board = reversed(board)
+
+        for row in board:
+            self.print_row(row)
