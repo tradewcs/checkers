@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from app.Node import Node
+from app.board import Node
 
 
 @dataclass
