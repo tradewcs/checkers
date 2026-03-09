@@ -4,10 +4,10 @@ from app.move import Move
 
 class CheckersEngine:
     def __init__(self, board: Board) -> None:
-        if not board:
-            self.board = Board()
+        self.board = board or Board()
 
-        self.board = board
+    def _get_capture_move(self, from_position: tuple[int, int]):
+        ...
 
     def get_valid_moves(self) -> list[Move]:
         valid_moves = []
@@ -22,7 +22,9 @@ class CheckersEngine:
                         valid_moves.append(
                             Move(
                                 (node.row, node.col),
-                                (neighbour.row, neighbour.col)
+                                (neighbour.row, neighbour.col),
+                                captured=[],
+                                next=None
                             )
                         )
                     if node.value.color == neighbour.color:

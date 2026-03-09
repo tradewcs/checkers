@@ -4,10 +4,10 @@ from app.piece import Piece, Color, PieceType
 
 
 class Direction(Enum):
-    TOP_LEFT = (1, -1)
+    TOP_LEFT = (-1, 1)
     TOP_RIGHT = (1, 1)
     BOT_LEFT = (-1, -1)
-    BOT_RIGHT = (-1, 1)
+    BOT_RIGHT = (1, -1)
 
 
 class Node:
@@ -32,8 +32,15 @@ class Board:
         self.is_board_flipped = False
         self.setup_pieces()
 
-    def __getitem__(self, index: int) -> list[Node]:
-        return self.board[index]
+    def __getitem__(self, key) -> list[Node]:
+        if isinstance(key, tuple):
+            field, rank = key
+            if isinstance(field, str):
+                field = ord(field) - ord('a')
+
+            return self.board[field][rank]
+
+        return self.board[key]
 
     def flip_board(self) -> None:
         self.is_board_flipped = not self.is_board_flipped
