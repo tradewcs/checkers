@@ -1,5 +1,6 @@
 from app.board import Board
 from app.move import Move
+from app.piece import PieceType
 
 
 class CheckersEngine:
@@ -9,16 +10,19 @@ class CheckersEngine:
     def _get_capture_move(self, from_position: tuple[int, int]):
         ...
 
-    def get_valid_moves(self) -> list[Move]:
+    def allowed_directions(self) -> set:
+        ...
+
+    def get_man_moves(self) -> list[Move]:
         valid_moves = []
 
         for row in self.board:
             for node in row:
-                if not node.value:
+                if not node.value or node.value.piece_type is not PieceType.MAN:
                     continue
 
                 for direction, neighbour in node.neighbors.items():
-                    if neighbour.value is None:
+                    if neighbour.value is None and :
                         valid_moves.append(
                             Move(
                                 (node.row, node.col),
