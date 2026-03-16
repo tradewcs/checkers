@@ -68,6 +68,26 @@ class Board:
 
         return board
 
+    def __repr__(self) -> str:
+        result = []
+        board = self.board
+        if self.is_board_flipped:
+            board = reversed(board)
+        for row in board:
+            row_str = []
+            if not self.is_board_flipped:
+                row = reversed(row)
+            for node in row:
+                if node.value:
+                    row_str.append(str(node.value) + " ")
+                else:
+                    if (node.row + node.col) % 2 == 0:
+                        row_str.append("# ")
+                    else:
+                        row_str.append(". ")
+            result.append("".join(row_str))
+        return "\n".join(result)
+
     def setup_pieces(self) -> None:
         for i in range(self.height):
             for j in range(self.width):
@@ -84,25 +104,3 @@ class Board:
                         Color.BLACK,
                         PieceType.MAN
                     )
-
-    def print_row(self, row: list[Node], end="\n") -> None:
-        if not self.is_board_flipped:
-            row = reversed(row)
-
-        for node in row:
-            if node.value:
-                print(node.value, end=" ")
-            else:
-                if (node.row + node.col) % 2 == 0:
-                    print("#", end=" ")
-                else:
-                    print(".", end=" ")
-        print(end=end)
-
-    def print_board(self) -> None:
-        board = self.board
-        if self.is_board_flipped:
-            board = reversed(board)
-
-        for row in board:
-            self.print_row(row)

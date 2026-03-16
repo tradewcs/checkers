@@ -1,15 +1,12 @@
-from app.board import Board
+from app import Board
 
 
 def main():
     board = Board()
-    board.print_board()
     print()
     board.flip_board()
-    board.print_board()
+    print(board)
 
 
 if __name__ == "__main__":
     main()
-
-    chars = ("⬜", "⬛", "○", "◎", "●", "◉", "o", "▪", "▫", "#", "[]")
