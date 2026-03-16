@@ -1,9 +1,9 @@
 from enum import Enum
 
-from app.piece import Piece, Color, PieceType
+from app.piece import Piece, PieceColor, PieceType
 
 
-class Direction(Enum):
+class MoveDirection(Enum):
     TOP_LEFT = (-1, 1)
     TOP_RIGHT = (1, 1)
     BOT_LEFT = (-1, -1)
@@ -15,7 +15,7 @@ class Node:
         self.row = row
         self.col = col
         self.value: Piece | None = None
-        self.neighbors: dict[Direction, Node] = {}
+        self.neighbors: dict[MoveDirection, Node] = {}
 
     def __repr__(self) -> str:
         return f"Node({self.row}, {self.col}, piece={self.value})"
@@ -58,13 +58,13 @@ class Board:
 
                 node: Node = board[row][col]
                 if row > 0 and col > 0:
-                    node.neighbors[Direction.BOT_LEFT] = board[row-1][col-1]
+                    node.neighbors[MoveDirection.BOT_LEFT] = board[row-1][col-1]
                 if row > 0 and col < self.width - 1:
-                    node.neighbors[Direction.BOT_RIGHT] = board[row-1][col+1]
+                    node.neighbors[MoveDirection.BOT_RIGHT] = board[row-1][col+1]
                 if row < self.height - 1 and col > 0:
-                    node.neighbors[Direction.TOP_LEFT] = board[row+1][col-1]
+                    node.neighbors[MoveDirection.TOP_LEFT] = board[row+1][col-1]
                 if row < self.height - 1 and col < self.width - 1:
-                    node.neighbors[Direction.TOP_RIGHT] = board[row+1][col+1]
+                    node.neighbors[MoveDirection.TOP_RIGHT] = board[row+1][col+1]
 
         return board
 
@@ -76,12 +76,12 @@ class Board:
 
                 if i < self.width // 2 - 1:
                     self.board[i][j].value = Piece(
-                        Color.WHITE,
+                        PieceColor.WHITE,
                         PieceType.MAN
                     )
                 if i >= self.width // 2 + 1:
                     self.board[i][j].value = Piece(
-                        Color.BLACK,
+                        PieceColor.BLACK,
                         PieceType.MAN
                     )
 

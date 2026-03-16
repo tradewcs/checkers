@@ -1,22 +1,22 @@
 from app.piece import (
-    Color,
+    PieceColor,
     PieceType,
     Piece
 )
 from app.move import Move
 from app.board import (
-    Direction,
+    MoveDirection,
     Node,
     Board,
 )
 from app.coordinates import Coordinates
 
 __all__ = [
-    "Color",
+    "PieceColor",
     "PieceType",
     "Piece",
     "Move",
-    "Direction",
+    "MoveDirection",
     "Node",
     "Board",
     "Coordinates",
