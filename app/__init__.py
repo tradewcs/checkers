@@ -10,6 +10,7 @@ from app.board import (
     Board,
 )
 from app.coordinates import Coordinates
+from app.engine import CheckersEngine
 
 __all__ = [
     "PieceColor",
@@ -20,4 +21,5 @@ __all__ = [
     "Node",
     "Board",
     "Coordinates",
+    "CheckersEngine",
 ]

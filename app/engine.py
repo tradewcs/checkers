@@ -17,7 +17,25 @@ class CheckersEngine:
         piece: Piece,
         from_position: tuple[int, int]
     ) -> Move | None:
-        ...
+        x, y = from_position
+        for direction, neighbor in self.board[x][y].neighbors.items():
+            piece_to_capture = neighbor.value
+            if not piece_to_capture:
+                continue
+            if piece_to_capture.color == piece.color:
+                continue
+
+            vacant_square = neighbor.neighbors.get(direction)
+            if vacant_square and vacant_square.value is None:
+                position = (vacant_square.row, vacant_square.col)
+                return Move(
+                    from_position=from_position,
+                    to_position=position,
+                    captured=[piece_to_capture],
+                    next=self._get_capture_move(piece, position)
+                )
+
+        return None
 
     def allowed_directions(self, color: PieceColor) -> set[MoveDirection]:
         if color is PieceColor.WHITE:
@@ -25,7 +43,7 @@ class CheckersEngine:
         if color is PieceColor.BLACK:
             return {MoveDirection.BOT_RIGHT, MoveDirection.BOT_LEFT}
 
-    def get_man_moves(self) -> list[Move]:
+    def get_valid_man_moves(self) -> list[Move]:
         valid_moves = []
 
         for row in self.board:
@@ -35,8 +53,9 @@ class CheckersEngine:
 
                 piece = node.value
                 for direction, neighbour in node.neighbors.items():
-                    if neighbour.value is None and \
-                        direction in self.allowed_directions(neighbour.value.color):
+                    neighbour_piece = neighbour.value
+                    if neighbour_piece is None and \
+                         direction in self.allowed_directions(piece.color):
                         valid_moves.append(
                             Move(
                                 (node.row, node.col),
@@ -45,7 +64,7 @@ class CheckersEngine:
                                 next=None
                             )
                         )
-                    if piece.color == neighbour.color:
+                    if neighbour_piece and piece.color == neighbour_piece.color:
                         continue
 
                     vacant_square = neighbour.neighbors.get(direction)
@@ -59,3 +78,5 @@ class CheckersEngine:
                                 next=self._get_capture_move(piece, position)
                             )
                         )
+
+        return valid_moves
